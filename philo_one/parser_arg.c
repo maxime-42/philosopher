@@ -4,7 +4,7 @@
 ** this function initialize g_info
 ** get argument of programme
 */
-static void            get_arg(char **arg)
+static int            get_arg(char **arg)
 { 
     g_info.nb_philo = ft_atoi(arg[1]);
     g_info.time_to_die = ft_atoi(arg[2]);
@@ -14,6 +14,11 @@ static void            get_arg(char **arg)
         g_info.nb_meal = ft_atoi(arg[5]);
     else
        g_info.nb_meal = INFINITE_LOOP;
+    if (g_info.nb_philo < 2)
+        return (ERROR);
+    if (g_info.time_to_die <= 0 || g_info.time_to_eat <= 0 || g_info.time_to_sleep <= 0)
+        return (ERROR);
+    return (SUCCESS);
 }
 
 /*
@@ -52,6 +57,6 @@ int     parsing(int nb_arg, char **arg)
     ret = check_arg(nb_arg, arg);
     if (ret == ERROR)
         return (ERROR);
-    get_arg(arg);
-    return (SUCCESS);
+    ret = get_arg(arg);
+    return (ret);
 }

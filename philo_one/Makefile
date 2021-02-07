@@ -7,6 +7,8 @@ NAME= philon_one
 SRC	=	./main.c\
 		./parser_arg.c\
 		./libft.c\
+		./cycle.c\
+		./utile.c\
 
 OBJ = $(SRC:.c=.o)
 
