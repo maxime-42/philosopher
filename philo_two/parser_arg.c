@@ -1,5 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_arg.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/11 19:38:18 by mkayumba          #+#    #+#             */
+/*   Updated: 2021/02/11 20:14:56 by mkayumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include <stdio.h>
+
 /*
 ** this function initialize g_info
 ** get argument of programme
@@ -11,9 +24,9 @@ static int		get_arg(char **arg)
 	g_info.time_to_eat = ft_atoi(arg[3]);
 	g_info.time_to_sleep = ft_atoi(arg[4]);
 	if (arg[5])
-		g_info.nb_meal = ft_atoi(arg[5]);
+		g_info.limit_nb_meal = ft_atoi(arg[5]);
 	else
-		g_info.nb_meal = INFINITE_LOOP;
+		g_info.limit_nb_meal = INFINITE_LOOP;
 	if (g_info.nb_philo < 2)
 		return (ERROR);
 	if (g_info.time_to_die <= 0 || g_info.time_to_eat <= 0 || g_info.time_to_sleep <= 0)
@@ -58,5 +71,9 @@ int				parsing(int nb_arg, char **arg)
 	return (ERROR);
 	g_info.current_number_of_meals = 0;
 	ret = get_arg(arg);
+	if (ret == ERROR)
+	{
+		print_error("Error argument\n");
+	}
 	return (ret);
 }

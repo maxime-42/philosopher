@@ -7,8 +7,10 @@ NAME= philon_two
 SRC	=	./main.c\
 		./parser_arg.c\
 		./libft.c\
-		./cycle.c\
+		./cycle_philosopher.c\
 		./utile.c\
+		./init.c\
+		./check_is_alive.c\
 
 OBJ = $(SRC:.c=.o)
 
