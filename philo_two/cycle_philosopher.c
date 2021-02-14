@@ -19,7 +19,7 @@
 *	each philosophizing counter has its own number of meals
 */
 static void			counte_the_number_of_meals(t_philosopher *philosopher)
-{ 
+{
 	if (philosopher->nb_meal != REACHED_NUMBER_OF_MEALS_LIMIT)
 	{
 		g_info.current_number_of_meals++;
@@ -30,8 +30,8 @@ static void			counte_the_number_of_meals(t_philosopher *philosopher)
 	}
 }
 
-static void			philosopher_eat(t_philosopher *philosopher) 
-{ 
+static void			philosopher_eat(t_philosopher *philosopher)
+{
 	sem_wait(g_info.fork);
 	printf("%ld %d is taken a fork\n", get_actuel_time(), philosopher->id);
 	philosopher->state = EATING;
@@ -42,7 +42,6 @@ static void			philosopher_eat(t_philosopher *philosopher)
 	sem_post(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	sem_post(g_info.fork);
-	(void)philosopher;
 }
 
 /*
@@ -73,7 +72,6 @@ void				*cycle_philosopher(void *ptr)
 	(void)philosopher;
 	return (0);
 }
-
 // void				*philosopher(void *ptr)
 // {
 // 	int				loop;

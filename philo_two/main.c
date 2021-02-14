@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <pthread.h>
+#include <stdio.h>
 #include "philo.h"
-#include <pthread.h> 
-#include <stdio.h> 
 
 /*
-*	check if the philosophizing eats late
-*	if the philosophizing eats late -> exit programe return DIE
+**	check if the philosophizing eats late
+**	if the philosophizing eats late -> exit programe return DIE
 */
 
 static int				join_all_thread(pthread_t thread_id[])
@@ -38,12 +38,14 @@ static int				join_all_thread(pthread_t thread_id[])
 }
 
 /*
-*	launch allow define :
-*		1 number threads ie thread_id[nb_philo] 
-*		2 numer philosopher ie  philo[nb_philo];
-*	id it is index for each philosopher
+**	the function launch_thread define two things:
+**		1 number threads ie thread_id[nb_philo]
+**		2 number philosopher ie  philo[nb_philo];
+**	id it is index for each philosopher
 */
-static int				launch_threads(t_philosopher *philosopher, int nb_philo, pthread_t thread_id[])
+
+static int				launch_threads(t_philosopher *philosopher,
+int nb_philo, pthread_t thread_id[])
 {
 	int					id;
 	int					ret;
@@ -53,7 +55,8 @@ static int				launch_threads(t_philosopher *philosopher, int nb_philo, pthread_t
 	{
 		philosopher[id].id = id;
 		philosopher[id].time_last_meal = get_actuel_time();
-		ret = pthread_create(&thread_id[id], NULL, cycle_philosopher, &philosopher[id]);
+		ret = pthread_create(&thread_id[id], NULL,
+		cycle_philosopher, &philosopher[id]);
 		if (ret)
 		{
 			print_error("Error create thread of philosopher\n");
@@ -65,9 +68,9 @@ static int				launch_threads(t_philosopher *philosopher, int nb_philo, pthread_t
 
 static int				start_thread(int nb_philosopher)
 {
-	t_philosopher		philosopher[nb_philosopher];
-	pthread_t			thread_id[nb_philosopher + 1]; 
 	int					ret;
+	t_philosopher		philosopher[nb_philosopher];
+	pthread_t			thread_id[nb_philosopher];
 
 	init_philosopher(philosopher, nb_philosopher);
 	init_semaphor(&g_info);
@@ -81,10 +84,11 @@ static int				start_thread(int nb_philosopher)
 }
 
 /*
-*fonction main do two thing:
-*	step one: parser argument
-*	step two: launch thread
+**fonction main do two thing:
+**	step one: parser argument
+**	step two: launch thread
 */
+
 int						main(int nb_arg, char **argument)
 {
 	int					ret;

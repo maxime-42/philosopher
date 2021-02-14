@@ -32,8 +32,6 @@ typedef	struct		s_philosopher
 	long		    t_now;
 	int				state;
 	pthread_t	    thread;
-	int			    right;
-	int			    left;
 }					t_philosopher;
 
 typedef	struct		s_info

@@ -23,9 +23,7 @@ void				init_philosopher(t_philosopher philo[], int nb_philo)
 	{
 		philo[id].id = id;
 		philo[id].time_last_meal = 0;
-		philo[id].right = id;
 		philo[id].nb_meal = 0;
-		philo[id].left = (id + 1) % nb_philo;
 	}
 }
 
@@ -34,7 +32,7 @@ void					init_semaphor(t_info *info)
 	sem_unlink("fork");
 	sem_unlink("write");
 	sem_unlink("end");
-	info->fork = sem_open("fork", O_CREAT | O_RDWR, 0660, info->nb_philo );
+	info->fork = sem_open("fork", O_CREAT | O_RDWR, 0660, info->nb_philo / 2);
 	info->write = sem_open("write", O_CREAT | O_RDWR, 0660, 1);
 	info->end = sem_open("end", O_CREAT | O_RDWR, 0660, 1);
 }
