@@ -1,14 +1,17 @@
 RM	= rm -f
 
-CC = gcc -g -Wall -Wextra -Werror -I./
+# CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
+CC = gcc -g -Wall -Wextra -Werror -I  ./
 
 NAME= philon_one
 
 SRC	=	./main.c\
 		./parser_arg.c\
 		./libft.c\
-		./cycle.c\
+		./cycle_philosopher.c\
 		./utile.c\
+		./init.c\
+		./check_is_alive.c\
 
 OBJ = $(SRC:.c=.o)
 
