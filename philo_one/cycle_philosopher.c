@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/16 15:37:45 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:51:56 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,17 @@ void				philosopher_eat(t_philosopher *philosopher)
 	
 	right = philosopher->right;
 	left = philosopher->left;
-	// pthread_mutex_lock(&g_info.general);
+	pthread_mutex_lock(&g_info.general);
 	pthread_mutex_lock(&g_info.fork[right]);
 	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
 	pthread_mutex_lock(&g_info.fork[left]);
 	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
 	pthread_mutex_unlock(&g_info.general);
-	pthread_mutex_lock(g_info.end);
+	// pthread_mutex_lock(g_info.end);
 	philosopher->time_last_meal = get_actuel_time();
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
 	counte_the_number_of_meals(philosopher);
-	pthread_mutex_unlock(g_info.end);
+	// pthread_mutex_unlock(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	pthread_mutex_unlock(&g_info.fork[right]);
 	pthread_mutex_unlock(&g_info.fork[left]);
