@@ -45,7 +45,8 @@ typedef	struct		s_info
 	t_philosopher	*philosopher;
 	int				limit_nb_meal;
 	pthread_mutex_t	*fork;
-	pthread_mutex_t	end;
+	pthread_mutex_t	general;
+	pthread_mutex_t	*end;
 	int				current_number_of_meals;
 
 }					t_info;
@@ -61,6 +62,7 @@ void				*cycle_philosopher(void *ptr);
 void				init_philosopher(t_philosopher philo[], int nb_philo);
 void				check_is_alive(t_philosopher philosopher[]);
 void				clear_semaphor(t_info *info);
-void				init_mutex(pthread_mutex_t fork[], pthread_mutex_t *end);
+int					init_mutex(pthread_mutex_t fork[], pthread_mutex_t *end);
+int					clear_mutex(pthread_mutex_t fork[], pthread_mutex_t end);
 
 #endif

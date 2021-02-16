@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/13 23:50:29 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/16 15:37:45 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,30 @@ static void			counte_the_number_of_meals(t_philosopher *philosopher)
 	}
 }
 
-static void			philosopher_eat(t_philosopher *philosopher)
+
+
+void				philosopher_eat(t_philosopher *philosopher)
 {
-	sem_wait(g_info.fork);
-	printf("%ld %d is taken a fork\n", get_actuel_time(), philosopher->id);
-	philosopher->state = EATING;
+	int				right;
+	int				left;
+	
+	
+	right = philosopher->right;
+	left = philosopher->left;
+	// pthread_mutex_lock(&g_info.general);
+	pthread_mutex_lock(&g_info.fork[right]);
+	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
+	pthread_mutex_lock(&g_info.fork[left]);
+	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
+	pthread_mutex_unlock(&g_info.general);
+	pthread_mutex_lock(g_info.end);
 	philosopher->time_last_meal = get_actuel_time();
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
-	// sem_wait(g_info.end);
 	counte_the_number_of_meals(philosopher);
-	// sem_post(g_info.end);
+	pthread_mutex_unlock(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
-	sem_post(g_info.fork);
+	pthread_mutex_unlock(&g_info.fork[right]);
+	pthread_mutex_unlock(&g_info.fork[left]);
 }
 
 /*
@@ -52,6 +64,8 @@ static void			philosopher_sleep(t_philosopher *philosopher)
 {
 	printf("%ld %d is sleeping\n",get_actuel_time(), philosopher->id);
 	usleep(g_info.time_to_sleep);
+	printf("%ld %d is thinking\n",get_actuel_time(), philosopher->id);
+
 }
 
 void				*cycle_philosopher(void *ptr)
@@ -65,7 +79,6 @@ void				*cycle_philosopher(void *ptr)
 	{
 		philosopher_eat(philosopher);
 		philosopher_sleep(philosopher);
-		usleep(100);
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}

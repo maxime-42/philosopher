@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/13 23:37:20 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/16 14:53:21 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int				join_all_thread(pthread_t thread_id[])
 		if (ret)
 		{
 			print_error("Error join threads\n");
-			return (ERROR);
 		}
 	}
 	return (ret);
@@ -53,7 +52,6 @@ int nb_philo, pthread_t thread_id[])
 	id = -1;
 	while (++id < nb_philo)
 	{
-		philosopher[id].id = id;
 		philosopher[id].time_last_meal = get_actuel_time();
 		ret = pthread_create(&thread_id[id], NULL, cycle_philosopher, &philosopher[id]);
 		if (ret)
@@ -75,15 +73,17 @@ static int				start_thread(int nb_philosopher)
 
 	g_info.fork = fork;
 	init_philosopher(philosopher, nb_philosopher);
-	init_mutex(fork, &end);
-	g_info.fork = fork;
-	g_info.end = end;
+	ret = init_mutex(fork, &end);
+	if (ret)
+		return (ret);
+	g_info.fork = &fork[0];
+	g_info.end = &end;
 	ret = launch_threads(&philosopher[0], nb_philosopher, thread_id);
 	if (ret)
 		return (ERROR);
 	check_is_alive(philosopher);
 	ret = join_all_thread(thread_id);
-	clear_mutex(fork, &end);
+	clear_mutex(fork, end);
 	return (ret);
 }
 
