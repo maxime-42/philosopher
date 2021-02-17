@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/16 14:53:21 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/16 19:17:57 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,11 @@ static int				join_all_thread(pthread_t thread_id[])
 **	id it is index for each philosopher
 */
 
-static int				launch_threads(t_philosopher *philosopher,
-int nb_philo, pthread_t thread_id[])
+static int				launch_threads(t_philosopher *philosopher, pthread_t thread_id[], int id)
 {
-	int					id;
 	int					ret;
 
-	id = -1;
-	while (++id < nb_philo)
+	while (id < g_info.nb_philo)
 	{
 		philosopher[id].time_last_meal = get_actuel_time();
 		ret = pthread_create(&thread_id[id], NULL, cycle_philosopher, &philosopher[id]);
@@ -59,6 +56,8 @@ int nb_philo, pthread_t thread_id[])
 			print_error("Error create thread of philosopher\n");
 			return (ERROR);
 		}
+		id++;
+		id++;
 	}
 	return (ret);
 }
@@ -73,17 +72,20 @@ static int				start_thread(int nb_philosopher)
 
 	g_info.fork = fork;
 	init_philosopher(philosopher, nb_philosopher);
-	ret = init_mutex(fork, &end);
-	if (ret)
+	if ((ret = init_mutex(fork, &end)))
 		return (ret);
 	g_info.fork = &fork[0];
 	g_info.end = &end;
-	ret = launch_threads(&philosopher[0], nb_philosopher, thread_id);
+	ret = launch_threads(&philosopher[0], thread_id, 0);
+	usleep(1000);
+	ret = launch_threads(&philosopher[0], thread_id, 1);
 	if (ret)
 		return (ERROR);
-	check_is_alive(philosopher);
-	ret = join_all_thread(thread_id);
-	clear_mutex(fork, end);
+	ret = check_is_alive(philosopher);
+	if (ret != DIE)
+	{	ret = join_all_thread(thread_id);
+		clear_mutex(fork, end);
+	}
 	return (ret);
 }
 

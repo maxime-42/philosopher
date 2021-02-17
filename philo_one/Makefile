@@ -3,7 +3,7 @@ RM	= rm -f
 CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
 # CC = gcc -g -Wall -Wextra -Werror -I  ./
 
-NAME= philon_one
+NAME= philo_one
 
 SRC	=	./main.c\
 		./parser_arg.c\

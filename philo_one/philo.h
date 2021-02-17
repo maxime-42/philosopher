@@ -14,6 +14,7 @@
 # define IS_NOT_DIGIT -1
 # define SUCCESS 0
 # define INFINITE_LOOP -1
+# define EVERY_ONE_HAS_EAT_ENOUGHT 5
 #define THINKING 2 
 #define HUNGRY 1 
 #define EATING 0 
@@ -60,7 +61,7 @@ int     			parsing(int nb_arg, char **arg);
 long				get_actuel_time(void);
 void				*cycle_philosopher(void *ptr);
 void				init_philosopher(t_philosopher philo[], int nb_philo);
-void				check_is_alive(t_philosopher philosopher[]);
+int					check_is_alive(t_philosopher philosopher[]);
 void				clear_semaphor(t_info *info);
 int					init_mutex(pthread_mutex_t fork[], pthread_mutex_t *end);
 int					clear_mutex(pthread_mutex_t fork[], pthread_mutex_t end);
