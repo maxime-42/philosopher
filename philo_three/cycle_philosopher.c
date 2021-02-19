@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 11:11:19 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:33:26 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ static void				philosopher_eat(t_philosopher *philosopher)
 	printf("%ld %d is taken a fork\n", get_actuel_time(), philosopher->id);
 	philosopher->time_last_meal = get_actuel_time();
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
-	sem_wait(g_info.end);
-	sem_post(g_info.end);
+	// sem_wait(g_info.end);
+	// sem_post(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	sem_post(g_info.fork);
 }
@@ -75,7 +75,6 @@ int						cycle_philosopher(void *ptr)
 
 	loop = g_info.limit_nb_meal;
 	philosopher = (t_philosopher *)ptr;
-	// philosopher->time_last_meal = get_actuel_time();
  	pthread_create(&thread_id, NULL, check_is_alive, philosopher);
 	while (loop != 0)
 	{
@@ -85,7 +84,10 @@ int						cycle_philosopher(void *ptr)
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}
-	kill(0, SIGINT);
+	sem_wait(g_info.end);
+	write(1, "Every one has eaten enought", 28);
 	pthread_detach(thread_id);
+	kill(0, SIGINT);
+	sem_post(g_info.end);
 	exit (0);
 }
