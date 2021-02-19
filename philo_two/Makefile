@@ -1,9 +1,9 @@
 RM	= rm -f
 
-# CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
-CC = gcc -g -Wall -Wextra -Werror -I  ./
+CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
+# CC = gcc -g -Wall -Wextra -Werror -I  ./
 
-NAME= philon_two
+NAME= philo_two
 
 SRC	=	./main.c\
 		./parser_arg.c\
@@ -11,14 +11,13 @@ SRC	=	./main.c\
 		./cycle_philosopher.c\
 		./utile.c\
 		./init.c\
-		./check_is_alive.c\
 
 OBJ = $(SRC:.c=.o)
 
 all	:$(NAME)
 
 $(NAME)	:$(OBJ)
-	$(CC) -o $(NAME) $(OBJ) 
+	$(CC) -o $(NAME) $(OBJ)
 
 clean	:
 	rm -f $(NAME) $(OBJ)

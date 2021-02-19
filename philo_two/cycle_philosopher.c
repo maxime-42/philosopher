@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/13 23:50:29 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 21:40:09 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,60 @@
 #include <semaphore.h>
 
 /*
-*	this attibute count 'philosopher->nb_meal' count number meal of philosopher
-*	each philosophizing counter has its own number of meals
+*	check if the philosophizing eats late
+*	if the philosophizing eats late -> exit programe return DIE
 */
-static void			counte_the_number_of_meals(t_philosopher *philosopher)
+static int				state_of_philosopher(t_philosopher philosopher)
 {
-	if (philosopher->nb_meal != REACHED_NUMBER_OF_MEALS_LIMIT)
+	long				time_actuel;
+	long				time_difference;
+
+	time_actuel = get_actuel_time();
+	time_difference = time_actuel - philosopher.time_last_meal;
+	if (g_info.current_number_of_meals == g_info.limit_nb_meal)
 	{
-		g_info.current_number_of_meals++;
-		if (philosopher->nb_meal == g_info.limit_nb_meal)
-		{
-			philosopher->nb_meal = REACHED_NUMBER_OF_MEALS_LIMIT;
-		}
+		printf("Every one has eaten enought\n");
+		return (EVERY_ONE_HAS_EAT_ENOUGHT);
 	}
+	if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
+	{
+		printf("Die id %d | time %ld | dif = %ld time_to_die =  %d\n", 
+		philosopher.id, time_actuel, time_difference, g_info.time_to_die);
+		return (DIE);
+	}
+	return (0);
+}
+
+
+int					check_is_alive(t_philosopher philosopher[])
+{
+	int				id;
+	int				ret;
+
+	while (1)
+	{
+		id = -1;
+		while (++id < g_info.nb_philo)
+		{
+			ret = state_of_philosopher(philosopher[id]);
+			if (ret == DIE || ret == EVERY_ONE_HAS_EAT_ENOUGHT)
+			{
+				return (ret);
+			}
+		}
+		usleep(1000);
+	}
+	return (ret);
 }
 
 static void			philosopher_eat(t_philosopher *philosopher)
 {
 	sem_wait(g_info.fork);
-	printf("%ld %d is taken a fork\n", get_actuel_time(), philosopher->id);
-	philosopher->state = EATING;
+	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
+	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
 	philosopher->time_last_meal = get_actuel_time();
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
 	sem_wait(g_info.end);
-	counte_the_number_of_meals(philosopher);
 	sem_post(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	sem_post(g_info.fork);
@@ -48,10 +78,12 @@ static void			philosopher_eat(t_philosopher *philosopher)
 *	this function allow to try to take fork
 *	if the fork is unable philosopher will wait 
 */
-static void			philosopher_sleep(t_philosopher *philosopher) 
+static void			philosopher_sleep_and_thinking(t_philosopher *philosopher) 
 {
 	printf("%ld %d is sleeping\n",get_actuel_time(), philosopher->id);
-	usleep(g_info.time_to_sleep);
+	usleep(g_info.time_to_sleep * 1000);
+	printf("%ld %d is thinking\n", get_actuel_time(), philosopher->id);
+
 }
 
 void				*cycle_philosopher(void *ptr)
@@ -64,35 +96,14 @@ void				*cycle_philosopher(void *ptr)
 	while (loop)
 	{
 		philosopher_eat(philosopher);
-		philosopher_sleep(philosopher);
-		usleep(100);
+		philosopher_sleep_and_thinking(philosopher);
 		if (loop != INFINITE_LOOP)
 			loop--;
+		usleep(1000);
 	}
-	(void)philosopher;
+	sem_wait(g_info.write);
+	g_info.current_number_of_meals = g_info.limit_nb_meal;
+	detach_all_threads();
+	sem_post(g_info.write);
 	return (0);
 }
-// void				*philosopher(void *ptr)
-// {
-// 	int				loop;
-// 	t_philosopher	*philo;
-
-// 	philo =(t_philosopher *)ptr;
-// 	loop = g_info.nb_meal;
-// 	while (loop)
-// 	{
-
-// 		// printf("time [%ld] | id_philosopher [%d] | is thinking \n", get_actuel_time(), *id);
-// 		// philo->state = EATING;
-// 		// philo->time_last_meal = get_actuel_time();
-// 		// printf("%ld %d is eating \n", get_actuel_time(), philo->id);
-// 		// usleep(g_info.time_to_eat * 1000);
-// 		// philo->state = NAP;
-// 		// printf("%ld %d is napping \n", get_actuel_time(), philo->id);
-// 		usleep(g_info.time_to_sleep * 1000);
-// 		if (loop != INFINITE_LOOP)
-// 			loop--;
-// 	}
-// 	(void)ptr;
-// 	return (0);
-// }

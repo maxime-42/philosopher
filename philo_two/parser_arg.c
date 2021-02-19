@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 19:38:18 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/11 20:14:56 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 21:31:05 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ int				parsing(int nb_arg, char **arg)
 {
 	int			ret;
 
+	memset(&g_info, 0, sizeof(t_info));
 	ret = check_arg(nb_arg, arg);
 	if (ret == ERROR)
 	return (ERROR);
-	g_info.current_number_of_meals = 0;
 	ret = get_arg(arg);
 	if (ret == ERROR)
 	{

@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 20:16:32 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/13 23:50:09 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 21:51:16 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 #include <pthread.h> 
 #include <stdio.h> 
 
-void				init_philosopher(t_philosopher philo[], int nb_philo)
+void					init_philosopher(t_philosopher philo[], int nb_philo)
 {
 	int					id;
 
 	id = -1;
 	while (++id < nb_philo)
 	{
-		philo[id].id = id;
-		philo[id].time_last_meal = 0;
-		philo[id].nb_meal = 0;
+		memset(&philo[id], 0, sizeof(t_philosopher));
+		philo[id].id = id + 1;
 	}
 }
 

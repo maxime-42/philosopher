@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/13 23:37:20 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 22:15:06 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,23 @@
 **	if the philosophizing eats late -> exit programe return DIE
 */
 
-static int				join_all_thread(pthread_t thread_id[])
-{
-	int					id;
-	int					ret;
+// static int				join_all_thread(pthread_t thread_id[])
+// {
+// 	int					id;
+// 	int					ret;
 
-	id = -1;
-	while (++id < g_info.nb_philo)
-	{
-		ret = pthread_join(thread_id[id], NULL);
-		if (ret)
-		{
-			print_error("Error join threads\n");
-			return (ERROR);
-		}
-	}
-	return (ret);
-}
+// 	id = -1;
+// 	while (++id < g_info.nb_philo)
+// 	{
+// 		ret = pthread_join(thread_id[id], NULL);
+// 		if (ret)
+// 		{
+// 			print_error("Error join threads\n");
+// 			return (ERROR);
+// 		}
+// 	}
+// 	return (ret);
+// }
 
 /*
 **	the function launch_thread define two things:
@@ -44,8 +44,7 @@ static int				join_all_thread(pthread_t thread_id[])
 **	id it is index for each philosopher
 */
 
-static int				launch_threads(t_philosopher *philosopher,
-int nb_philo, pthread_t thread_id[])
+static int				launch_threads(t_philosopher *philosopher, int nb_philo, pthread_t thread_id[])
 {
 	int					id;
 	int					ret;
@@ -53,7 +52,6 @@ int nb_philo, pthread_t thread_id[])
 	id = -1;
 	while (++id < nb_philo)
 	{
-		philosopher[id].id = id;
 		philosopher[id].time_last_meal = get_actuel_time();
 		ret = pthread_create(&thread_id[id], NULL,
 		cycle_philosopher, &philosopher[id]);
@@ -74,11 +72,11 @@ static int				start_thread(int nb_philosopher)
 
 	init_philosopher(philosopher, nb_philosopher);
 	init_semaphor(&g_info);
+	g_info.ptr_thread_id = &thread_id[0];
 	ret = launch_threads(&philosopher[0], nb_philosopher, thread_id);
 	if (ret)
 		return (ERROR);
-	check_is_alive(philosopher);
-	ret = join_all_thread(thread_id);
+	ret = check_is_alive(philosopher);
 	clear_semaphor(&g_info);
 	return (ret);
 }
