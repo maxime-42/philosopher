@@ -6,19 +6,13 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/18 17:14:50 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:08:04 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 
-
-
-/*
-**	check if the philosophizing eats late
-**	if the philosophizing eats late -> exit programe return DIE
-*/
 
 /*
 **	the function launch_thread define two things:

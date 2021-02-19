@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/18 17:13:22 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 11:11:19 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int						cycle_philosopher(void *ptr)
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}
-	// kill(0, SIGINT);
+	kill(0, SIGINT);
 	pthread_detach(thread_id);
 	exit (0);
 }
