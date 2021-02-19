@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/16 19:17:57 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:05:15 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,6 @@
 #include <stdio.h>
 #include "philo.h"
 
-/*
-**	check if the philosophizing eats late
-**	if the philosophizing eats late -> exit programe return DIE
-*/
-
-static int				join_all_thread(pthread_t thread_id[])
-{
-	int					id;
-	int					ret;
-
-	id = -1;
-	while (++id < g_info.nb_philo)
-	{
-		ret = pthread_join(thread_id[id], NULL);
-		if (ret)
-		{
-			print_error("Error join threads\n");
-		}
-	}
-	return (ret);
-}
 
 /*
 **	the function launch_thread define two things:
@@ -76,6 +55,7 @@ static int				start_thread(int nb_philosopher)
 		return (ret);
 	g_info.fork = &fork[0];
 	g_info.end = &end;
+	g_info.ptr_thread_id = &thread_id[0];
 	ret = launch_threads(&philosopher[0], thread_id, 0);
 	usleep(1000);
 	ret = launch_threads(&philosopher[0], thread_id, 1);
@@ -83,9 +63,7 @@ static int				start_thread(int nb_philosopher)
 		return (ERROR);
 	ret = check_is_alive(philosopher);
 	if (ret != DIE)
-	{	ret = join_all_thread(thread_id);
 		clear_mutex(fork, end);
-	}
 	return (ret);
 }
 

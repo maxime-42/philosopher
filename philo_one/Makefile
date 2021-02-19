@@ -11,7 +11,6 @@ SRC	=	./main.c\
 		./cycle_philosopher.c\
 		./utile.c\
 		./init.c\
-		./check_is_alive.c\
 
 OBJ = $(SRC:.c=.o)
 

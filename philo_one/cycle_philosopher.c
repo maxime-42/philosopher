@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/16 17:34:03 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 17:53:57 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,61 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+
 /*
-*	this attibute count 'philosopher->nb_meal' count number meal of philosopher
-*	each philosophizing counter has its own number of meals
+**	tihis check two things:
+**		1-if all philosophizing them all have eaten enough
+**		2-if a philosopher has to eat late so he dies.
 */
-static void			counte_the_number_of_meals(t_philosopher *philosopher)
+
+static int				state_of_philosopher(t_philosopher philosopher)
 {
-	if (philosopher->nb_meal != REACHED_NUMBER_OF_MEALS_LIMIT)
+	long				time_actuel;
+	long				time_difference;
+
+	time_actuel = get_actuel_time();
+	time_difference = time_actuel - philosopher.time_last_meal;
+	if (g_info.current_number_of_meals == g_info.limit_nb_meal)
 	{
-		g_info.current_number_of_meals++;
-		if (philosopher->nb_meal == g_info.limit_nb_meal)
-		{
-			philosopher->nb_meal = REACHED_NUMBER_OF_MEALS_LIMIT;
-		}
+		printf("Every one has eaten enought\n");
+		return (EVERY_ONE_HAS_EAT_ENOUGHT);
 	}
+	else if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
+	{
+		printf("philo id %d | time %ld | dif_time = %ld t_die =  %d\n",
+		philosopher.id, time_actuel, time_difference, g_info.time_to_die);
+		return (DIE);
+	}
+	return (0);
 }
 
-void				philosopher_eat(t_philosopher *philosopher)
+/*
+** this function travel each philosophe one by one
+** checks the state of each of them
+*/
+
+int						check_is_alive(t_philosopher philosopher[])
+{
+	int					id;
+	int					ret;
+
+	while (1)
+	{
+		id = -1;
+		while (++id < g_info.nb_philo)
+		{
+			ret = state_of_philosopher(philosopher[id]);
+			if (ret == DIE || ret == EVERY_ONE_HAS_EAT_ENOUGHT)
+			{
+				return (ret);
+			}
+		}
+		usleep(1000);
+	}
+	return (ret);
+}
+
+static void			philosopher_eat(t_philosopher *philosopher)
 {
 	int				right;
 	int				left;
@@ -44,7 +82,6 @@ void				philosopher_eat(t_philosopher *philosopher)
 	pthread_mutex_lock(g_info.end);
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
 	philosopher->time_last_meal = get_actuel_time();
-	counte_the_number_of_meals(philosopher);
 	pthread_mutex_unlock(g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	pthread_mutex_unlock(&g_info.fork[right]);
@@ -59,6 +96,16 @@ static void			philosopher_sleep(t_philosopher *philosopher)
 
 }
 
+void				detach_all_threads(void)
+{
+	int				index;
+
+	index = -1;
+	while (++index < g_info.nb_philo)
+	{
+		pthread_detach(g_info.ptr_thread_id[index]);
+	}
+}
 void				*cycle_philosopher(void *ptr)
 {
 	int				loop;
@@ -74,5 +121,9 @@ void				*cycle_philosopher(void *ptr)
 			loop--;
 	}
 	(void)philosopher;
+	g_info.current_number_of_meals = g_info.limit_nb_meal;
+	pthread_mutex_lock(&g_info.general);
+	detach_all_threads();
+	pthread_mutex_unlock(&g_info.general);
 	return (0);
 }
