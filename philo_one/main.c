@@ -6,14 +6,13 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 18:05:15 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 18:55:25 by lenox            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
 #include "philo.h"
-
 
 /*
 **	the function launch_thread define two things:
@@ -22,14 +21,14 @@
 **	id it is index for each philosopher
 */
 
-static int				launch_threads(t_philosopher *philosopher, pthread_t thread_id[], int id)
+static int		launch_threads(t_philosopher *philo, pthread_t t_id[], int id)
 {
-	int					ret;
+	int			ret;
 
 	while (id < g_info.nb_philo)
 	{
-		philosopher[id].time_last_meal = get_actuel_time();
-		ret = pthread_create(&thread_id[id], NULL, cycle_philosopher, &philosopher[id]);
+		philo[id].time_last_meal = get_actuel_time();
+		ret = pthread_create(&t_id[id], NULL, cycle_philosopher, &philo[id]);
 		if (ret)
 		{
 			print_error("Error create thread of philosopher\n");
@@ -41,20 +40,29 @@ static int				launch_threads(t_philosopher *philosopher, pthread_t thread_id[], 
 	return (ret);
 }
 
-static int				start_thread(int nb_philosopher)
+/*
+** step 1 : initialize each philosophe
+**
+** step 2 : to don't start every threads at the same time :
+**		start threads odd launch_threads(&philosopher[0], thread_id, 0)
+**		start threads even launch_threads(&philosopher[0], thread_id, 1)
+** step 3:
+**		check life of each philosopher by  this "check_is_alive(philosopher)"
+**		this function "check_is_alive" is like a phread
+*/
+
+static int		start_thread(int nb_philosopher)
 {
 	int					ret;
 	t_philosopher		philosopher[nb_philosopher];
 	pthread_t			thread_id[nb_philosopher];
 	pthread_mutex_t		fork[nb_philosopher];
-	pthread_mutex_t		end;
 
 	g_info.fork = fork;
 	init_philosopher(philosopher, nb_philosopher);
-	if ((ret = init_mutex(fork, &end)))
+	if ((ret = init_mutex(fork)))
 		return (ret);
 	g_info.fork = &fork[0];
-	g_info.end = &end;
 	g_info.ptr_thread_id = &thread_id[0];
 	ret = launch_threads(&philosopher[0], thread_id, 0);
 	usleep(1000);
@@ -62,20 +70,19 @@ static int				start_thread(int nb_philosopher)
 	if (ret)
 		return (ERROR);
 	ret = check_is_alive(philosopher);
-	if (ret != DIE)
-		clear_mutex(fork, end);
+	clear_mutex(fork);
 	return (ret);
 }
 
 /*
-**fonction main do two thing:
-**	step one: parser argument
-**	step two: launch thread
+**fonction main does two thing:
+**	step 1: parser argument
+**	step 2: launch thread
 */
 
-int						main(int nb_arg, char **argument)
+int				main(int nb_arg, char **argument)
 {
-	int					ret;
+	int			ret;
 
 	ret = parsing(nb_arg, argument);
 	if (ret == ERROR)

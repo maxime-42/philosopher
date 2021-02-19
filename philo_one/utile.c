@@ -1,7 +1,29 @@
-#include "philo.h"
-#include <sys/time.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utile.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/19 18:46:56 by mkayumba          #+#    #+#             */
+/*   Updated: 2021/02/19 19:34:52 by lenox            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-long	get_actuel_time(void)
+#include "philo.h"
+
+void				detach_all_threads(void)
+{
+	int				index;
+
+	index = -1;
+	while (++index < g_info.nb_philo)
+	{
+		pthread_detach(g_info.ptr_thread_id[index]);
+	}
+}
+
+long				get_actuel_time(void)
 {
 	long			ret;
 	struct timeval	t1;

@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 17:53:57 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 19:25:09 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,16 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-
 /*
 **	tihis check two things:
 **		1-if all philosophizing them all have eaten enough
 **		2-if a philosopher has to eat late so he dies.
 */
 
-static int				state_of_philosopher(t_philosopher philosopher)
+static int			state_of_philosopher(t_philosopher philosopher)
 {
-	long				time_actuel;
-	long				time_difference;
+	long			time_actuel;
+	long			time_difference;
 
 	time_actuel = get_actuel_time();
 	time_difference = time_actuel - philosopher.time_last_meal;
@@ -47,10 +46,10 @@ static int				state_of_philosopher(t_philosopher philosopher)
 ** checks the state of each of them
 */
 
-int						check_is_alive(t_philosopher philosopher[])
+int					check_is_alive(t_philosopher philosopher[])
 {
-	int					id;
-	int					ret;
+	int				id;
+	int				ret;
 
 	while (1)
 	{
@@ -72,40 +71,41 @@ static void			philosopher_eat(t_philosopher *philosopher)
 {
 	int				right;
 	int				left;
-	
+
 	right = philosopher->right;
 	left = philosopher->left;
 	pthread_mutex_lock(&g_info.fork[right]);
 	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
 	pthread_mutex_lock(&g_info.fork[left]);
 	printf("%ld %d has taken a fork\n", get_actuel_time(), philosopher->id);
-	pthread_mutex_lock(g_info.end);
+	pthread_mutex_lock(&g_info.end);
 	printf("%ld %d is eating \n", philosopher->time_last_meal, philosopher->id);
 	philosopher->time_last_meal = get_actuel_time();
-	pthread_mutex_unlock(g_info.end);
+	pthread_mutex_unlock(&g_info.end);
 	usleep(g_info.time_to_eat * 1000);
 	pthread_mutex_unlock(&g_info.fork[right]);
 	pthread_mutex_unlock(&g_info.fork[left]);
 }
 
-static void			philosopher_sleep(t_philosopher *philosopher) 
+static void			philosopher_sleep(t_philosopher *philosopher)
 {
-	printf("%ld %d is sleeping\n",get_actuel_time(), philosopher->id);
+	printf("%ld %d is sleeping\n", get_actuel_time(), philosopher->id);
 	usleep(g_info.time_to_sleep * 1000);
-	printf("%ld %d is thinking\n",get_actuel_time(), philosopher->id);
-
+	printf("%ld %d is thinking\n", get_actuel_time(), philosopher->id);
 }
 
-void				detach_all_threads(void)
-{
-	int				index;
+/*
+**step 1 :	"loop" correspond at number of meals
+**		 	"loop" equal to number of meals.
+** if number some meals is not present it will be infinite loop
+** so loop = loop != INFINITE_LOOP
+**
+**step	2 :
+**	if "loop" equal to zero meaning the philosopher had enough eaten.
+**
+** step 3 : if the loop if finish (loop = 0) so stop others threads
+*/
 
-	index = -1;
-	while (++index < g_info.nb_philo)
-	{
-		pthread_detach(g_info.ptr_thread_id[index]);
-	}
-}
 void				*cycle_philosopher(void *ptr)
 {
 	int				loop;
@@ -120,7 +120,6 @@ void				*cycle_philosopher(void *ptr)
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}
-	(void)philosopher;
 	g_info.current_number_of_meals = g_info.limit_nb_meal;
 	pthread_mutex_lock(&g_info.general);
 	detach_all_threads();
