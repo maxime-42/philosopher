@@ -6,19 +6,18 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 11:32:47 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/19 14:21:21 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-
-
 /*
-**	the function launch_thread define two things:
-**		1 number threads ie thread_id[nb_philo]
-**		2 number philosopher ie  philo[nb_philo];
-**	id it is index for each philosopher
+**	the function "launch_process" does:
+**		create one process for each philosopĥe
+**		initialize time to eat for each them
+**		child process starte with "cycle_philosopher"
+**		parent process waiting each child process
 */
 
 static int				launch_process(t_philosopher *philosopher)
@@ -26,7 +25,6 @@ static int				launch_process(t_philosopher *philosopher)
 	int					id;
 	int					status;
 	pid_t				pid;
-
 
 	id = -1;
 	while (++id < g_info.nb_philo)
@@ -59,9 +57,9 @@ static int				start_process(int nb_philosopher)
 }
 
 /*
-**fonction main do two thing:
+**fonction "main" does two thing:
 **	step one: parser argument
-**	step two: launch thread
+**	step two: launch process
 */
 
 int						main(int nb_arg, char **argument)
@@ -73,7 +71,6 @@ int						main(int nb_arg, char **argument)
 		return (ERROR);
 	else
 	{
-		g_count = 0;
 		ret = start_process(g_info.nb_philo);
 	}
 	return (ret);
