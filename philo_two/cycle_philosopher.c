@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 21:40:09 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/20 14:05:04 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,18 @@
 #include <semaphore.h>
 
 /*
-*	check if the philosophizing eats late
-*	if the philosophizing eats late -> exit programe return DIE
+** step 1 : if a philosophe eaten enough :
+**		"g_info.current_number_of_meals" is equal at "g_info.limit_nb_mea"
+**
+** step 2 : calcule if a philosophe eaten enough to print message
+** 
+**if step 1 et step 2 is not true this function return 0
 */
-static int				state_of_philosopher(t_philosopher philosopher)
+
+static int			state_of_philosopher(t_philosopher philosopher)
 {
-	long				time_actuel;
-	long				time_difference;
+	long			time_actuel;
+	long			time_difference;
 
 	time_actuel = get_actuel_time();
 	time_difference = time_actuel - philosopher.time_last_meal;
@@ -32,13 +37,18 @@ static int				state_of_philosopher(t_philosopher philosopher)
 	}
 	if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
 	{
-		printf("Die id %d | time %ld | dif = %ld time_to_die =  %d\n", 
+		printf("Die id %d | time %ld | dif = %ld time_to_die =  %d\n",
 		philosopher.id, time_actuel, time_difference, g_info.time_to_die);
 		return (DIE);
 	}
 	return (0);
 }
 
+/*
+** each 1000 millisecond go through all the philosopher for :
+**		check if a philosophe eaten late to print message
+**		check if a philosophe eaten enough to print message
+*/
 
 int					check_is_alive(t_philosopher philosopher[])
 {
@@ -75,16 +85,29 @@ static void			philosopher_eat(t_philosopher *philosopher)
 }
 
 /*
-*	this function allow to try to take fork
-*	if the fork is unable philosopher will wait 
+**	this function allow to try to take fork
+**	if the fork is unable philosopher will wait
 */
-static void			philosopher_sleep_and_thinking(t_philosopher *philosopher) 
+
+static void			philosopher_sleep_and_thinking(t_philosopher *philosopher)
 {
-	printf("%ld %d is sleeping\n",get_actuel_time(), philosopher->id);
+	printf("%ld %d is sleeping\n", get_actuel_time(), philosopher->id);
 	usleep(g_info.time_to_sleep * 1000);
 	printf("%ld %d is thinking\n", get_actuel_time(), philosopher->id);
-
 }
+
+/*
+**step 1 :   "loop" correspond at number of meals
+**           so "loop" equal to number of meals.
+**
+** if number some meals is not present it will be infinite loop
+** so loop != INFINITE_LOOP
+**
+**step  2 :
+**      if "loop" equal to zero meaning the philosopher had enough eaten.
+**
+** step 3 : if the loop if finish (loop = 0) so stop others threads
+*/
 
 void				*cycle_philosopher(void *ptr)
 {

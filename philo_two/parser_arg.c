@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 19:38:18 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 21:31:05 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/20 13:57:00 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,19 @@
 #include <stdio.h>
 
 /*
-** this function initialize g_info
-** get argument of programme
+** get_arg does:
+**	step 1 : got the argument in struct g_info
+**  
+**	step 2 : check if numbe of meals is present
+**           if is not present the program will be an infini loop
+** 
+**  step 3 : check if the arguments given respect the subject line:35 to 38
 */
+
 static int		get_arg(char **arg)
-{ 
+{
+	int			t_sleep;
+
 	g_info.nb_philo = ft_atoi(arg[1]);
 	g_info.time_to_die = ft_atoi(arg[2]);
 	g_info.time_to_eat = ft_atoi(arg[3]);
@@ -29,7 +37,8 @@ static int		get_arg(char **arg)
 		g_info.limit_nb_meal = INFINITE_LOOP;
 	if (g_info.nb_philo < 2)
 		return (ERROR);
-	if (g_info.time_to_die <= 0 || g_info.time_to_eat <= 0 || g_info.time_to_sleep <= 0)
+	t_sleep = g_info.time_to_sleep;
+	if (g_info.time_to_die <= 0 || g_info.time_to_eat <= 0 || t_sleep <= 0)
 		return (ERROR);
 	return (SUCCESS);
 }
@@ -39,6 +48,7 @@ static int		get_arg(char **arg)
 ** if number argument is less 5 or greater than 6 it is error
 ** if a argument is not a digit character it is error
 */
+
 static int		check_arg(int nb_arg, char **arg)
 {
 	int			ret;
@@ -62,6 +72,16 @@ static int		check_arg(int nb_arg, char **arg)
 	return (ret);
 }
 
+/*
+** parsing does:
+** step 1 : initialize global structure g_info with zero
+** 
+** step 2 : check the arguments which given to program
+** 
+** step 3 : if step 1 passe in success then we can get
+**         the argument inside the struct g_info with "get_arg"
+*/
+
 int				parsing(int nb_arg, char **arg)
 {
 	int			ret;
@@ -69,7 +89,7 @@ int				parsing(int nb_arg, char **arg)
 	memset(&g_info, 0, sizeof(t_info));
 	ret = check_arg(nb_arg, arg);
 	if (ret == ERROR)
-	return (ERROR);
+		return (ERROR);
 	ret = get_arg(arg);
 	if (ret == ERROR)
 	{

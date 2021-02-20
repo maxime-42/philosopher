@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 18:55:25 by lenox            ###   ########.fr       */
+/*   Updated: 2021/02/20 13:21:52 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ int				main(int nb_arg, char **argument)
 	else
 	{
 		ret = start_thread(g_info.nb_philo);
+		system("leaks philo_one");
+
 	}
 	return (ret);
 }

@@ -6,18 +6,20 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 19:25:09 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/20 14:20:21 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
 #include <semaphore.h>
-
 /*
-**	tihis check two things:
-**		1-if all philosophizing them all have eaten enough
-**		2-if a philosopher has to eat late so he dies.
+** step 1 : if a philosophe eaten enough :
+**		"g_info.current_number_of_meals" is equal at "g_info.limit_nb_mea"
+**
+** step 2 : calcule if a philosophe eaten enough to print message
+** 
+**if step 1 et step 2 is not true this function return 0
 */
 
 static int			state_of_philosopher(t_philosopher philosopher)

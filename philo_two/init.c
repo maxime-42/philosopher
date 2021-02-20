@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <pthread.h> 
-#include <stdio.h> 
+#include <pthread.h>
+#include <stdio.h>
 
 void					init_philosopher(t_philosopher philo[], int nb_philo)
 {
@@ -38,7 +38,7 @@ void					init_semaphor(t_info *info)
 
 void					clear_semaphor(t_info *info)
 {
-	sem_close(info->fork );
+	sem_close(info->fork);
 	sem_close(info->write);
 	sem_close(info->end);
 }

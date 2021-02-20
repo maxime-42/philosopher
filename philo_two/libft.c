@@ -1,53 +1,90 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/02/19 13:11:32 by mkayumba          #+#    #+#             */
+/*   Updated: 2021/02/19 13:28:47 by mkayumba         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
-static int     ft_strlen(char *str)
-{
-    int index;
+/*
+**	classic function libc RTFM : https://linux.die.net/man/3/strlen
+*/
 
-    index = 0;
-    while (str[index])
-    {
-        index++;
-    }
-    return (index);
+static int			ft_strlen(char *str)
+{
+	int				index;
+
+	index = 0;
+	while (str[index])
+	{
+		index++;
+	}
+	return (index);
 }
 
-static int	ft_isdigit(int c)
+/*
+** check if a character is a digit character
+** if "c" is between 0 and 9 return 0 otherwise return 0
+** RTFM : https://linux.die.net/man/3/isdigit
+*/
+
+static int			ft_isdigit(int c)
 {
 	if (c >= 48 && c <= 57)
 		return (1);
 	return (0);
 }
 
-int     print_error(char *msg)
-{
-    int nb_bytes;
+/*
+**	print the message error in the Standard error
+** 	RTFM https://en.wikipedia.org/wiki/File_descriptor
+*/
 
-    nb_bytes = ft_strlen(msg);
-    write(2, msg, nb_bytes);
-    return (ERROR);
+int					print_error(char *msg)
+{
+	int				nb_bytes;
+
+	nb_bytes = ft_strlen(msg);
+	write(2, msg, nb_bytes);
+	return (ERROR);
 }
 
-int     str_is_digit(char *str)
-{
-    int index;
-    int ret;
+/*
+** check if a string (str) is composed by
+** only digit character otherwise it is error
+*/
 
-    index = -1;
-    while (str[++index])
-    {
-        ret = ft_isdigit(str[index]);
-        if (ret == 0)
-            return (ERROR);
-    }
-    return (SUCCESS);
+int					str_is_digit(char *str)
+{
+	int				index;
+	int				ret;
+
+	index = -1;
+	while (str[++index])
+	{
+		ret = ft_isdigit(str[index]);
+		if (ret == 0)
+			return (ERROR);
+	}
+	return (SUCCESS);
 }
 
-int			ft_atoi(const char *nptr)
+/*
+** classic function libc atoi  RTFM : https://linux.die.net/man/3/atoi
+** ovf = overflow, to check overflow
+*/
+
+int					ft_atoi(const char *nptr)
 {
-	long	n;
-	int		s;
-	int		ovf;
+	long			n;
+	int				s;
+	int				ovf;
 
 	n = 0;
 	s = 1;
