@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 13:11:14 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 12:46:46 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,16 @@
 
 /*
 **	the function "launch_process" does:
-**		create one process for each philosopĥe
+**	step 1:
 **		initialize time to eat for each them
+**		create one process for each philosopĥe
+**
+**	step 2:
 **		child process starte with "cycle_philosopher"
+**
+**	step3:
 **		parent process waiting each child process
+**		when all child has get back. that mean "Everyone has eaten enough"
 */
 
 static int				launch_process(t_philosopher *philosopher)
@@ -38,8 +44,9 @@ static int				launch_process(t_philosopher *philosopher)
 		else if (!pid)
 			(void)cycle_philosopher(&philosopher[id]);
 	}
-	if (pid > 0)
+	while (g_info.count++ < g_info.nb_philo)
 		waitpid(-1, &status, 0);
+	write(1, "Every one has eaten enought\n", 28);
 	return (SUCCESS);
 }
 
@@ -59,6 +66,7 @@ static int				start_process(int nb_philosopher)
 /*
 **fonction "main" does two thing:
 **	step one: parser argument
+**
 **	step two: launch process
 */
 

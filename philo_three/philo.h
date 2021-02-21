@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 13:30:25 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 14:13:52 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 12:18:00 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef	struct		s_philosopher
 
 typedef	struct		s_info
 {
+	int				count;
 	int				nb_philo;
 	int				time_to_die;
 	int				time_to_eat;

@@ -1,7 +1,7 @@
 RM	= rm -f
 
-# CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
-CC = gcc -g -Wall -Wextra -Werror -I  ./
+CC = gcc -lpthread -g -Wall -Wextra -Werror -I  ./
+# CC = gcc -g -Wall -Wextra -Werror -I  ./
 
 NAME= philo_three
 

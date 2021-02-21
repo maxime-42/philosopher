@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 14:15:23 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 12:45:52 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,5 @@ int						cycle_philosopher(void *ptr)
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}
-	sem_wait(g_info.end);
-	write(1, "Every one has eaten enought", 28);
-	pthread_detach(thread_id);
-	kill(0, SIGINT);
-	sem_post(g_info.end);
 	exit(0);
 }
