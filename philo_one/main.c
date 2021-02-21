@@ -6,13 +6,19 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/12 16:34:38 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/21 15:16:02 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 16:12:01 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <pthread.h>
 #include <stdio.h>
 #include "philo.h"
+
+/*
+** this function is only called when one philosophe dead
+** a philosophe dies when it had eaten in late
+** the purpose is to terminates all thread
+*/
 
 static void		detach_all_threads(t_philosopher philosopher[])
 {
