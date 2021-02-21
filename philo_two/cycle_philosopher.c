@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 14:05:04 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 16:09:44 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,24 @@
 **		"g_info.current_number_of_meals" is equal at "g_info.limit_nb_mea"
 **
 ** step 2 : calcule if a philosophe eaten enough to print message
-** 
+**
 **if step 1 et step 2 is not true this function return 0
 */
 
 static int			state_of_philosopher(t_philosopher philosopher)
 {
 	long			time_actuel;
-	long			time_difference;
 
 	time_actuel = get_actuel_time();
-	time_difference = time_actuel - philosopher.time_last_meal;
 	if (g_info.current_number_of_meals == g_info.limit_nb_meal)
 	{
-		printf("Every one has eaten enought\n");
 		return (EVERY_ONE_HAS_EAT_ENOUGHT);
 	}
-	if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
+	else if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
 	{
-		printf("Die id %d | time %ld | dif = %ld time_to_die =  %d\n",
-		philosopher.id, time_actuel, time_difference, g_info.time_to_die);
+		g_info.time_actuel = time_actuel;
+		g_info.time_difference = time_actuel - philosopher.time_last_meal;
+		g_info.philo_dead = philosopher.id;
 		return (DIE);
 	}
 	return (0);
@@ -124,9 +122,6 @@ void				*cycle_philosopher(void *ptr)
 			loop--;
 		usleep(1000);
 	}
-	sem_wait(g_info.write);
 	g_info.current_number_of_meals = g_info.limit_nb_meal;
-	detach_all_threads();
-	sem_post(g_info.write);
 	return (0);
 }

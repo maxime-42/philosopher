@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/20 12:49:18 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 12:49:20 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 15:40:54 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ typedef	struct		s_info
 	sem_t			*fork;
 	sem_t			*write;
 	sem_t			*end;
+	long			time_actuel;
+	long			time_difference;
+	int				philo_dead;
 	int				current_number_of_meals;
 
 }					t_info;
@@ -71,5 +74,4 @@ void				init_philosopher(t_philosopher philo[], int nb_philo);
 void				init_semaphor(t_info *info);
 void				clear_semaphor(t_info *info);
 int					check_is_alive(t_philosopher philosopher[]);
-void				detach_all_threads(void);
 #endif

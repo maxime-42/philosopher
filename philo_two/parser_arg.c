@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 19:38:18 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 13:57:00 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 16:08:54 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 /*
 ** get_arg does:
 **	step 1 : got the argument in struct g_info
-**  
+**
 **	step 2 : check if numbe of meals is present
 **           if is not present the program will be an infini loop
-** 
+**
 **  step 3 : check if the arguments given respect the subject line:35 to 38
 */
 
@@ -75,9 +75,9 @@ static int		check_arg(int nb_arg, char **arg)
 /*
 ** parsing does:
 ** step 1 : initialize global structure g_info with zero
-** 
+**
 ** step 2 : check the arguments which given to program
-** 
+**
 ** step 3 : if step 1 passe in success then we can get
 **         the argument inside the struct g_info with "get_arg"
 */
