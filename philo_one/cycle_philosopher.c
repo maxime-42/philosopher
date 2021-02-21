@@ -6,38 +6,37 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/11 13:20:20 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/20 14:20:21 by mkayumba         ###   ########.fr       */
+/*   Updated: 2021/02/21 15:27:04 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <pthread.h>
 #include <semaphore.h>
+
 /*
 ** step 1 : if a philosophe eaten enough :
 **		"g_info.current_number_of_meals" is equal at "g_info.limit_nb_mea"
 **
 ** step 2 : calcule if a philosophe eaten enough to print message
-** 
+**
 **if step 1 et step 2 is not true this function return 0
 */
 
 static int			state_of_philosopher(t_philosopher philosopher)
 {
 	long			time_actuel;
-	long			time_difference;
 
 	time_actuel = get_actuel_time();
-	time_difference = time_actuel - philosopher.time_last_meal;
 	if (g_info.current_number_of_meals == g_info.limit_nb_meal)
 	{
-		printf("Every one has eaten enought\n");
 		return (EVERY_ONE_HAS_EAT_ENOUGHT);
 	}
 	else if ((time_actuel - philosopher.time_last_meal) >= g_info.time_to_die)
 	{
-		printf("philo id %d | time %ld | dif_time = %ld t_die =  %d\n",
-		philosopher.id, time_actuel, time_difference, g_info.time_to_die);
+		g_info.time_actuel = time_actuel;
+		g_info.time_difference = time_actuel - philosopher.time_last_meal;
+		g_info.philo_dead = philosopher.id;
 		return (DIE);
 	}
 	return (0);
@@ -89,7 +88,7 @@ static void			philosopher_eat(t_philosopher *philosopher)
 	pthread_mutex_unlock(&g_info.fork[left]);
 }
 
-static void			philosopher_sleep(t_philosopher *philosopher)
+static void			philosopher_sleep_and_think(t_philosopher *philosopher)
 {
 	printf("%ld %d is sleeping\n", get_actuel_time(), philosopher->id);
 	usleep(g_info.time_to_sleep * 1000);
@@ -99,13 +98,12 @@ static void			philosopher_sleep(t_philosopher *philosopher)
 /*
 **step 1 :	"loop" correspond at number of meals
 **		 	"loop" equal to number of meals.
+**
 ** if number some meals is not present it will be infinite loop
 ** so loop = loop != INFINITE_LOOP
 **
-**step	2 :
-**	if "loop" equal to zero meaning the philosopher had enough eaten.
-**
-** step 3 : if the loop if finish (loop = 0) so stop others threads
+** step 2 : if the loop comes to end (zero) :
+**		that mean philosopher has eaten enough  therefore "loop" equal to zero
 */
 
 void				*cycle_philosopher(void *ptr)
@@ -118,13 +116,10 @@ void				*cycle_philosopher(void *ptr)
 	while (loop)
 	{
 		philosopher_eat(philosopher);
-		philosopher_sleep(philosopher);
+		philosopher_sleep_and_think(philosopher);
 		if (loop != INFINITE_LOOP)
 			loop--;
 	}
 	g_info.current_number_of_meals = g_info.limit_nb_meal;
-	pthread_mutex_lock(&g_info.general);
-	detach_all_threads();
-	pthread_mutex_unlock(&g_info.general);
 	return (0);
 }

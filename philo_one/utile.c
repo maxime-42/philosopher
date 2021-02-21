@@ -6,21 +6,25 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 18:46:56 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 19:34:52 by lenox            ###   ########.fr       */
+/*   Updated: 2021/02/21 13:36:59 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void				detach_all_threads(void)
+int					clear_mutex(pthread_mutex_t fork[])
 {
-	int				index;
+	int				ret;
+	int				id;
 
-	index = -1;
-	while (++index < g_info.nb_philo)
+	id = -1;
+	while (++id < g_info.nb_philo)
 	{
-		pthread_detach(g_info.ptr_thread_id[index]);
+		ret = pthread_mutex_destroy(&fork[id]);
 	}
+	ret = pthread_mutex_destroy(&g_info.end);
+	ret = pthread_mutex_destroy(&g_info.general);
+	return (ret);
 }
 
 long				get_actuel_time(void)

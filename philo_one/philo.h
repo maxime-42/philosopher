@@ -6,7 +6,7 @@
 /*   By: mkayumba <mkayumba@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/19 16:52:41 by mkayumba          #+#    #+#             */
-/*   Updated: 2021/02/19 19:34:23 by lenox            ###   ########.fr       */
+/*   Updated: 2021/02/21 15:13:53 by mkayumba         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ typedef	struct		s_info
 	int				time_to_sleep;
 	t_philosopher	*philosopher;
 	int				limit_nb_meal;
+	long			time_actuel;
+	long			time_difference;
+	int				philo_dead;
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	general;
 	pthread_mutex_t	end;
@@ -77,5 +80,4 @@ int					check_is_alive(t_philosopher philosopher[]);
 void				clear_semaphor(t_info *info);
 int					init_mutex(pthread_mutex_t fork[]);
 int					clear_mutex(pthread_mutex_t fork[]);
-void				detach_all_threads(void);
 #endif
