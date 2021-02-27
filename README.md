@@ -1,4 +1,6 @@
 # philosopher
+This projet dependly tremendous of architecture of you computer.<br>
+I did that in linux debian<br>
 thread :<br>
 https://www.pcerror-fix.com/about-processor-threads<br>
 https://www.youtube.com/watch?v=uA8X5zNOGw8&list=PL9IEJIKnBJjFZxuqyJ9JqVYmuFZHr7CFM<br>
